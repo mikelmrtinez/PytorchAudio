@@ -22,12 +22,12 @@ class UrbanSoundDataset(Dataset):
         label = self.__get_audio_sample_label(index)
         signal, sr = torchaudio.load(audio_sample_path)
 
-        signal = signal.to(self.device)
-
         signal = self.__resample_if_necessary(signal, sr)
         signal = self.__mixdown_if_necessary(signal)
         signal = self.__cut_if_necessary(signal)
         signal = self.__right_pad_if_necessary(signal)
+
+        signal = signal.to(self.device)
         signal = self.transformation(signal)
 
         return signal, label
