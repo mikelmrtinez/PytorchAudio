@@ -99,16 +99,10 @@ if __name__ == '__main__':
                             mel_spectrogram, target_sample_rate=SAMPLE_RATE,
                             num_samples=NUM_SAMPLES, device=device)
     print('Processing data...')
-    data_dataloader = create_data_loader(usd, 1)
+    data_dataloader = create_data_loader(usd, 8732)
 
     print('Storing data in RAM memory...')
-    X, y = [], []
-    for data, label in data_dataloader:
-        X.append(data)
-        y.append(label)
-
-    X = torch.concat(X, dim=0)
-    y = torch.concat(y)
+    X, y = next(iter(data_dataloader))
 
     print('Splitting data...')
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4)
