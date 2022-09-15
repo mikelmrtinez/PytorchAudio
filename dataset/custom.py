@@ -42,7 +42,7 @@ class UrbanSoundDataset(Dataset):
 
     def __resample_if_necessary(self, signal, sr):
         if sr != self.target_sample_rate:
-            resample = torchaudio.transforms.Resample(sr, self.target_sample_rate)
+            resample = torchaudio.transforms.Resample(sr, self.target_sample_rate).to(self.device)
             signal = resample(signal)
         return signal
 
