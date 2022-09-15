@@ -12,8 +12,6 @@ import datetime
 SAMPLE_RATE = 22050
 NUM_SAMPLES = 22050
 
-BATCH_SIZE = 64
-EPOCHS = 5
 LEARNING_RATE = 1e-4
 
 
@@ -48,6 +46,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='CNN for Audio Classification')
     parser.add_argument('--data_dir',  type=str, default=None,
                         help='an integer for the accumulator')
+    parser.add_argument('--bs', type=int, default=64,
+                        help='an integer for the accumulator')
+    parser.add_argument('--epoch', type=int, default=100,
+                        help='an integer for the accumulator')
     args = parser.parse_args()
 
     if torch.cuda.is_available():
@@ -66,7 +68,7 @@ if __name__ == '__main__':
                             mel_spectrogram, target_sample_rate=SAMPLE_RATE,
                             num_samples=NUM_SAMPLES, device=device)
 
-    train_data = create_data_loader(usd, BATCH_SIZE)
+    train_data = create_data_loader(usd, args.bs)
 
     cnn = CNNNetwork().to(device)
     print(cnn)
@@ -74,8 +76,7 @@ if __name__ == '__main__':
     loss_fn = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(cnn.parameters(), lr=LEARNING_RATE)
 
-    train(cnn, train_data, loss_fn, optimizer, device, EPOCHS)
-
+    train(cnn, train_data, loss_fn, optimizer, device, args.epochs)
 
     save_dir = Path().absolute() / 'outputs'
     save_dir.mkdir(parents=True, exist_ok=True)
