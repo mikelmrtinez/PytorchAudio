@@ -42,8 +42,8 @@ class UrbanSoundDataset(Dataset):
 
     def __resample_if_necessary(self, signal, sr):
         if sr != self.target_sample_rate:
-            resample = torchaudio.transforms.Resample(sr, self.target_sample_rate).to(self.device)
-            signal = resample(signal)
+            resampler = torchaudio.transforms.Resample(sr, self.target_sample_rate)
+            signal = resampler(signal)
         return signal
 
     def __mixdown_if_necessary(self, signal):
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     NUM_SAMPLES = 22050
 
     if torch.cuda.is_available():
-        device = 'cuda'
+        device = 'cuda:0'
     else:
         device = 'cpu'
 
