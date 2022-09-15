@@ -22,11 +22,13 @@ class UrbanSoundDataset(Dataset):
         label = self.__get_audio_sample_label(index)
         signal, sr = torchaudio.load(audio_sample_path)
 
+        signal = signal.to(self.device)
+
         signal = self.__resample_if_necessary(signal, sr)
         signal = self.__mixdown_if_necessary(signal)
         signal = self.__cut_if_necessary(signal)
         signal = self.__right_pad_if_necessary(signal)
-        signal = self.transformation(signal).to(self.device)
+        signal = self.transformation(signal)
 
         return signal, label
 
@@ -45,7 +47,6 @@ class UrbanSoundDataset(Dataset):
         return signal
 
     def __mixdown_if_necessary(self, signal):
-
         return torch.mean(signal, dim=0, keepdim=True) if signal.shape[0] > 1 else signal
 
     def __get_audio_sample_path(self, index):
