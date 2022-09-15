@@ -68,7 +68,9 @@ if __name__ == '__main__':
                             mel_spectrogram, target_sample_rate=SAMPLE_RATE,
                             num_samples=NUM_SAMPLES, device=device)
 
-    train_data = create_data_loader(usd, args.bs)
+    train_data_dataloader = create_data_loader(usd, args.bs)
+
+    train_data = [next(iter(train_data_dataloader)) for _ in range(len(train_data_dataloader))]
 
     cnn = CNNNetwork().to(device)
     print(cnn)
