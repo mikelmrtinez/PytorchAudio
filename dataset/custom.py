@@ -5,6 +5,18 @@ from pathlib import Path
 import pandas as pd
 
 
+class SimpleDataset(Dataset):
+    def __init__(self, X, y):
+        self.X = X
+        self.y = y
+
+    def __len__(self):
+        return len(self.X)
+
+    def __getitem__(self, index):
+        return self.X[index], self.y[index]
+
+
 class UrbanSoundDataset(Dataset):
     def __init__(self, annotations_file, audio_dir, transformation, target_sample_rate, num_samples, device):
         self.annotations = pd.read_csv(Path(annotations_file))
