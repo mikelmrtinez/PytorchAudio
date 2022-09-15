@@ -26,7 +26,7 @@ class UrbanSoundDataset(Dataset):
         signal = self.__mixdown_if_necessary(signal)
         signal = self.__cut_if_necessary(signal)
         signal = self.__right_pad_if_necessary(signal)
-        signal = self.transformation(signal)
+        signal = self.transformation(signal).to(self.device)
 
         return signal, label
 

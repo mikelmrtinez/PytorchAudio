@@ -6,9 +6,9 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 import argparse
 from pathlib import Path
+import datetime
 
-# ANNOTATION_FILE = '/home/mikel/Documents/music/datasets/UrbanSound8K/metadata/UrbanSound8K.csv'
-# AUDIO_DIR = '/home/mikel/Documents/music/datasets/UrbanSound8K/audio'
+
 SAMPLE_RATE = 22050
 NUM_SAMPLES = 22050
 
@@ -76,4 +76,10 @@ if __name__ == '__main__':
 
     train(cnn, train_data, loss_fn, optimizer, device, EPOCHS)
 
-    torch.save(cnn.state_dict(), 'cnn.pth')
+
+    save_dir = Path().absolute() / 'outputs'
+    save_dir.mkdir(parents=True, exist_ok=True)
+    date = datetime.datetime.now()
+    save_dir = save_dir / f'{date.year}_{date.month}_{date.day}_{date.hour}_{date.minute}_model.pth'
+
+    torch.save(cnn.state_dict(), save_dir)
