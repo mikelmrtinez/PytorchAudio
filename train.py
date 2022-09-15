@@ -48,7 +48,7 @@ if __name__ == '__main__':
                         help='an integer for the accumulator')
     parser.add_argument('--bs', type=int, default=64,
                         help='an integer for the accumulator')
-    parser.add_argument('--epoch', type=int, default=100,
+    parser.add_argument('--epochs', type=int, default=100,
                         help='an integer for the accumulator')
     args = parser.parse_args()
 
