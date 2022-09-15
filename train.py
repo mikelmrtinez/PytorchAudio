@@ -4,9 +4,11 @@ import torchaudio
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
+import argparse
+from pathlib import Path
 
-ANNOTATION_FILE = '/home/mikel/Documents/music/datasets/UrbanSound8K/metadata/UrbanSound8K.csv'
-AUDIO_DIR = '/home/mikel/Documents/music/datasets/UrbanSound8K/audio'
+# ANNOTATION_FILE = '/home/mikel/Documents/music/datasets/UrbanSound8K/metadata/UrbanSound8K.csv'
+# AUDIO_DIR = '/home/mikel/Documents/music/datasets/UrbanSound8K/audio'
 SAMPLE_RATE = 22050
 NUM_SAMPLES = 22050
 
@@ -43,12 +45,20 @@ def train(model, data_loader, loss_fn, optimizer, device, epochs):
 
 if __name__ == '__main__':
 
+    parser = argparse.ArgumentParser(description='CNN for Audio Classification')
+    parser.add_argument('--data_dir',  type=str, default=None,
+                        help='an integer for the accumulator')
+    args = parser.parse_args()
+
     if torch.cuda.is_available():
         device = 'cuda'
     else:
         device = 'cpu'
 
     print(device)
+
+    ANNOTATION_FILE = Path(args.data_dir) / 'metadata/UrbanSound8K.csv'
+    AUDIO_DIR = Path(args.data_dir) / 'audio'
 
     mel_spectrogram = torchaudio.transforms.MelSpectrogram(sample_rate=SAMPLE_RATE, n_fft=1024, hop_length=512,
                                                            n_mels=64)
